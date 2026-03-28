@@ -1,0 +1,141 @@
+/* Header tổng quát */
+.main-header {
+    background: var(--white); /* */
+    padding: 10px 60px; /* */
+    box-shadow: var(--shadow); /* */
+    width: 100%;
+    position: sticky; 
+    top: 0;
+    z-index: 1000;
+    box-sizing: border-box;
+}
+
+/* Phần trên của Header (Logo - Search - Icons) */
+.header-top {
+    display: flex; 
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; /* */
+}
+
+.brand-logo {
+    font-family: 'Joti One', cursive; /* */
+    color: var(--primary-red); /* */
+    font-size: 60px; /* */
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+/* Thanh tìm kiếm */
+.search-bar {
+    position: relative;
+    flex: 0 1 450px; 
+    margin: 0 20px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 12px 20px;
+    border-radius: 25px; 
+    border: 1px solid #ddd;
+    outline: none;
+    font-size: 16px;
+}
+
+.search-bar i {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+}
+
+/* Các Icon chức năng bên phải */
+.header-icons {
+    display: flex; 
+    gap: 25px; 
+    font-size: 24px;
+    color: var(--text-dark); 
+}
+
+.header-icons a {
+    color: inherit;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.header-icons a:hover {
+    color: var(--primary-red); 
+}
+
+/* Quan trọng: Wrapper để định vị bảng thông báo */
+.notification-wrapper {
+    position: relative;
+    cursor: pointer;
+}
+
+/* Thanh điều hướng danh mục (Sub-nav) */
+.sub-nav {
+    display: flex; 
+    justify-content: center;
+    gap: 40px; /* */
+    margin-top: 15px;
+    padding-bottom: 10px;
+}
+
+.sub-nav a {
+    text-decoration: none;
+    color: var(--text-dark); /* */
+    display: flex;
+    align-items: center;
+    gap: 8px; 
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.sub-nav a i {
+    font-size: 20px;
+}
+
+/* Trạng thái trang đang kích hoạt */
+.sub-nav a.active {
+    color: var(--primary-red); /* */
+    font-weight: bold;
+}
+
+.user-control {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-left: 10px;
+}
+
+.user-name {
+    font-size: 13px;
+    font-weight: 600;
+    margin-left: 5px;
+    color: var(--text-dark);
+}
+
+.admin-btn {
+    color: #2ecc71 !important; 
+}
+
+.logout-btn {
+    background: none;
+    border: none;
+    color: #e74c3c; 
+    cursor: pointer;
+    font-size: 18px;
+    padding: 5px;
+    transition: 0.3s;
+}
+
+.logout-btn:hover {
+    transform: scale(1.2);
+}
+
+.login-text {
+    font-size: 13px;
+    margin-left: 5px;
+}

@@ -1,0 +1,196 @@
+/* src/pages/Admin/Admin.css */
+.admin-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f4f7f6;
+}
+
+.admin-sidebar {
+    width: 260px;
+    background-color: #2c3e50;
+    color: white;
+    padding: 20px;
+}
+
+.admin-logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--primary-red);
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.admin-nav { display: flex; flex-direction: column; gap: 10px; }
+.admin-nav a {
+    color: #bdc3c7;
+    text-decoration: none;
+    padding: 15px;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+.admin-nav a:hover { background: #34495e; color: white; }
+
+.admin-main { flex: 1; display: flex; flex-direction: column; }
+.admin-topbar {
+    background: white;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.admin-content { padding: 30px; }
+.admin-card { background: white; border-radius: 20px; padding: 25px; box-shadow: var(--shadow); }
+
+/* Table Style */
+.admin-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+.admin-table th { text-align: left; padding: 15px; border-bottom: 2px solid #eee; }
+.admin-table td { padding: 15px; border-bottom: 1px solid #eee; }
+
+.admin-product-img { width: 50px; height: 50px; object-fit: contain; }
+
+.btn-edit { color: #3498db; background: none; border: none; cursor: pointer; margin-right: 10px; }
+.btn-delete { color: #e74c3c; background: none; border: none; cursor: pointer; }
+.btn-add { background: var(--primary-red); color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; }
+
+/* Giao dien Dashboard */
+
+/* Dashboard Specific Styles */
+.dashboard-title { margin-bottom: 25px; color: #333; }
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.stat-label { color: #888; font-size: 14px; margin-bottom: 5px; }
+.stat-value { font-size: 24px; font-weight: 700; color: #333; }
+.stat-icon { font-size: 30px; opacity: 0.3; }
+
+.dashboard-bottom-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+}
+
+.activity-list { list-style: none; padding: 0; margin-top: 15px; }
+.activity-list li {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.activity-list li img { width: 40px; height: 40px; object-fit: contain; }
+.activity-name { font-weight: 600; font-size: 14px; }
+.activity-time { font-size: 12px; color: #999; }
+
+/* Progress bar cho danh mục */
+.progress-bg { background: #eee; height: 8px; border-radius: 4px; margin: 5px 0 15px; }
+.progress-fill { background: var(--primary-red); height: 100%; border-radius: 4px; }
+
+.admin-modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+.admin-modal {
+    background-color: #ffffff !important; 
+    width: 90%;
+    max-width: 500px;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    position: relative; 
+    animation: zoomIn 0.3s ease-out; 
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;           
+    margin-bottom: 25px;           
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;  
+}
+
+.close-x {
+    background: none;
+    border: none;
+    font-size: 28px;      
+    color: #999;
+    cursor: pointer;
+    transition: 0.3s;
+    line-height: 1;      
+    padding: 0 5px;
+}
+
+.close-x:hover {
+    color: #e66363;     
+    transform: rotate(90deg); 
+}
+
+/* Gd chỉnh sửa  */
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end; 
+    gap: 15px;                 
+    margin-top: 30px;
+}
+
+.btn-save, .btn-cancel {
+    padding: 12px 25px;
+    border-radius: 50px;     
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;             
+    transition: all 0.3s ease;
+    min-width: 120px;         
+}
+
+.btn-save {
+    background-color: #e66363; 
+    color: white;
+}
+
+.btn-save:hover {
+    background-color: #d45252;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(230, 99, 99, 0.3);
+}
+
+.btn-cancel {
+    background-color: #eeeeee;
+    color: #666;
+}
+
+.btn-cancel:hover {
+    background-color: #e0e0e0;
+    color: #333;
+}

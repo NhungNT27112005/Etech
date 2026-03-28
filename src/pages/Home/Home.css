@@ -1,0 +1,159 @@
+/* src/pages/Home/Home.css */
+
+.home-container {
+    width: 100%;
+}
+
+/* Hero Section */
+.hero-section {
+    background-color: #e0eaf3; 
+    height: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 60px;
+}
+
+.hero-text h2 { 
+    font-size: 45px; 
+    color: var(--text-dark); /* */
+}
+
+.btn-buy {
+    background: var(--primary-red); /* */
+    color: var(--white);
+    border: none;
+    padding: 12px 30px;
+    border-radius: 20px;
+    font-size: 20px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: 0.3s;
+}
+
+.btn-buy:hover { background: var(--dark-red); }
+
+/* Promo Section */
+/* src/pages/Home/Home.css */
+
+.promo-section {
+    padding: 40px 60px;
+    background-color: #FBD3D3; 
+    display: flex;
+    justify-content: center;
+}
+
+.promo-card {
+    border: 5px solid #ac9a11; 
+    border-radius: 20px;
+    padding: 20px 40px;
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.promo-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.promo-icon {
+    background-color: #000; 
+    color: var(--white);
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.promo-text {
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--text-dark); /* */
+}
+
+.promo-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.promo-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.promo-label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.promo-value {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--primary-red); 
+}
+
+/* Đường kẻ dọc giữa các mức giá */
+.promo-divider {
+    width: 1px;
+    height: 60px;
+    background-color: #ccc;
+}
+
+.sale-50 { color: #d34646; font-size: 65px; font-weight: bold; }
+.sale-small { color: #d34646; font-size: 55px; font-weight: bold; }
+
+.divider {
+    width: 2px;
+    height: 80px;
+    background-color: #000;
+}
+
+.ticket-icon {
+    position: absolute;
+    top: 20px;
+    left: 40px;
+    font-size: 60px;
+    color: #ac9a11;
+    opacity: 0.3;
+}
+
+/* Product Section */
+.product-section { padding: 60px; }
+.section-title { text-align: center; font-size: 50px; margin-bottom: 40px; }
+
+
+.suggestion-section, .view-more-wrapper {
+    display: flex;            
+    justify-content: center;  
+    align-items: center;      
+    width: 100%;               
+    margin-top: 40px;         
+    padding-bottom: 50px;      
+}
+
+.view-more-btn {
+    background: none;
+    border: none;
+    color: #1566c2;
+    font-size: 24px;          
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;                 
+    transition: 0.3s;
+}
+
+.view-more-btn:hover {
+    color: var(--primary-red); 
+    transform: translateY(5px); 
+}
