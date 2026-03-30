@@ -3,51 +3,91 @@ import { Link } from 'react-router-dom';
 import './Cart.css';
 
 const Cart = () => {
-    // Dữ liệu mẫu trong giỏ hàng
+    // 1. Khởi tạo dữ liệu mẫu (Thêm thuộc tính selected)
     const [cartItems, setCartItems] = useState([
-        { id: 1, name: 'iPhone 15 Pro Max', price: 29990000, quantity: 1, image: 'https://via.placeholder.com/80' },
-        { id: 2, name: 'Tai nghe Sony WH-1000XM5', price: 6500000, quantity: 2, image: 'https://via.placeholder.com/80' }
+        { id: 1, name: 'iPhone 15 Pro Max', price: 29990000, quantity: 1, image: 'https://via.placeholder.com/80', selected: true },
+        { id: 2, name: 'Tai nghe Sony WH-1000XM5', price: 6500000, quantity: 2, image: 'https://via.placeholder.com/80', selected: false }
     ]);
 
-    // Hàm thay đổi số lượng
+    // 2. Logic thay đổi số lượng
     const updateQuantity = (id, delta) => {
         setCartItems(cartItems.map(item => 
             item.id === id ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item
         ));
     };
 
-    // Hàm xóa sản phẩm
-    const removeItem = (id) => {
-        setCartItems(cartItems.filter(item => item.id !== id));
+    // 3. Logic tích chọn từng sản phẩm
+    const toggleSelect = (id) => {
+        setCartItems(cartItems.map(item => 
+            item.id === id ? { ...item, selected: !item.selected } : item
+        ));
     };
 
-    const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    // 4. Logic Chọn tất cả / Bỏ chọn tất cả
+    const toggleSelectAll = (e) => {
+        const isChecked = e.target.checked;
+        setCartItems(cartItems.map(item => ({ ...item, selected: isChecked })));
+    };
+
+    // 5. Hàm xóa sản phẩm
+    const removeItem = (id) => {
+        if(window.confirm("Xóa sản phẩm này khỏi giỏ hàng?")) {
+            setCartItems(cartItems.filter(item => item.id !== id));
+        }
+    };
+
+    // 6. TÍNH TOÁN: Chỉ tính tiền những món được tích chọn
+    const selectedCount = cartItems.filter(item => item.selected).length;
+    const totalPrice = cartItems
+        .filter(item => item.selected)
+        .reduce((sum, item) => sum + item.price * item.quantity, 0);
 
     return (
         <main className="cart-container">
             <h1 className="page-title">Giỏ hàng của bạn</h1>
             
             <div className="cart-layout">
-                {/* Cột trái: Danh sách sản phẩm */}
+                {/* CỘT TRÁI: DANH SÁCH SẢN PHẨM */}
                 <div className="cart-items-section">
                     {cartItems.length > 0 ? (
-                        cartItems.map(item => (
-                            <div key={item.id} className="cart-item-card">
-                                <img src={item.image} alt={item.name} className="item-img" />
-                                <div className="item-info">
-                                    <h3>{item.name}</h3>
-                                    <p className="item-price">{item.price.toLocaleString()}đ</p>
-                                </div>
-                                <div className="item-quantity">
-                                    <button onClick={() => updateQuantity(item.id, -1)}>-</button>
-                                    <span>{item.quantity}</span>
-                                    <button onClick={() => updateQuantity(item.id, 1)}>+</button>
-                                </div>
-                                <button className="btn-remove" onClick={() => removeItem(item.id)}>
-                                    <i className="fa-solid fa-trash"></i>
-                                </button>
+                        <>
+                            {/* Thanh chọn tất cả */}
+                            <div className="select-all-bar">
+                                <input 
+                                    type="checkbox" 
+                                    id="select-all" 
+                                    onChange={toggleSelectAll}
+                                    checked={selectedCount === cartItems.length && cartItems.length > 0}
+                                />
+                                <label htmlFor="select-all">Chọn tất cả ({cartItems.length} sản phẩm)</label>
                             </div>
-                        ))
+
+                            {cartItems.map(item => (
+                                <div key={item.id} className={`cart-item-card ${item.selected ? 'selected' : ''}`}>
+                                    <div className="checkbox-wrapper">
+                                        <input 
+                                            type="checkbox" 
+                                            checked={item.selected} 
+                                            onChange={() => toggleSelect(item.id)}
+                                            className="product-checkbox"
+                                        />
+                                    </div>
+                                    <img src={item.image} alt={item.name} className="item-img" />
+                                    <div className="item-info">
+                                        <h3>{item.name}</h3>
+                                        <p className="item-price">{item.price.toLocaleString()}đ</p>
+                                    </div>
+                                    <div className="item-quantity">
+                                        <button onClick={() => updateQuantity(item.id, -1)}>-</button>
+                                        <span>{item.quantity}</span>
+                                        <button onClick={() => updateQuantity(item.id, 1)}>+</button>
+                                    </div>
+                                    <button className="btn-remove" onClick={() => removeItem(item.id)}>
+                                        <i className="fa-solid fa-trash"></i>
+                                    </button>
+                                </div>
+                            ))}
+                        </>
                     ) : (
                         <div className="empty-cart">
                             <p>Giỏ hàng trống rỗng!</p>
@@ -56,12 +96,12 @@ const Cart = () => {
                     )}
                 </div>
 
-                {/* Cột phải: Thanh toán */}
+                {/* CỘT PHẢI: TÓM TẮT THANH TOÁN */}
                 <aside className="cart-summary">
                     <div className="summary-card">
                         <h3>Tóm tắt đơn hàng</h3>
                         <div className="summary-row">
-                            <span>Tạm tính:</span>
+                            <span>Tạm tính ({selectedCount} món):</span>
                             <span>{totalPrice.toLocaleString()}đ</span>
                         </div>
                         <div className="summary-row">
@@ -73,7 +113,9 @@ const Cart = () => {
                             <span>Tổng cộng:</span>
                             <span className="final-price">{totalPrice.toLocaleString()}đ</span>
                         </div>
-                        <button className="btn-checkout">Tiến hành thanh toán</button>
+                        <button className="btn-checkout" disabled={selectedCount === 0}>
+                            {selectedCount > 0 ? `Thanh toán (${selectedCount})` : 'Vui lòng chọn sản phẩm'}
+                        </button>
                     </div>
                 </aside>
             </div>

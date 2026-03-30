@@ -2,6 +2,7 @@
 import React from 'react';
 
 const AdminOrders = () => {
+    // Dữ liệu giả
     const orders = [
         { id: 'ORD001', customer: 'Nguyễn Văn A', date: '2026-03-25', total: 15500000, status: 'Chờ xử lý' },
         { id: 'ORD002', customer: 'Trần Thị B', date: '2026-03-26', total: 32990000, status: 'Đang giao' },

@@ -15,6 +15,7 @@ import Profile from './pages/Profile/Profile';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
 
+
 // Trang Admin 
 import AdminLayout from './pages/Admin/AdminLayout';
 import AdminProducts from './pages/Admin/AdminProducts';
@@ -40,6 +41,8 @@ const AppContent = () => {
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/cart" element={<Cart />} />
 
         {/* --- ROUTES ADMIN (Giao diện riêng hoàn toàn) --- */}
         <Route path="/admin" element={<AdminLayout />}>

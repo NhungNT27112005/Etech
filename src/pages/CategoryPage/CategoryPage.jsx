@@ -94,6 +94,11 @@ const CategoryPage = () => {
                             <div className="no-products">Không có sản phẩm nào trong danh mục này.</div>
                         )}
                     </div>
+                    <div className="suggestion-section">
+                        <button className="view-more-btn">
+                            Xem thêm <i className="fa-solid fa-chevron-down"></i>
+                        </button>
+                    </div>
                 </section>
             </div>
         </main>

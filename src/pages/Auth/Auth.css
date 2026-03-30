@@ -4,7 +4,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg,  #CDE9F0 100%); /* Nền gradient hồng nhạt */
+    background: linear-gradient(135deg,  #CDE9F0 100%); 
     position: relative;
     padding: 20px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -62,7 +62,7 @@
     border-radius: 10px;
     font-size: 15px;
     transition: 0.3s;
-    box-sizing: border-box; /* Đảm bảo padding không làm tràn khung */
+    box-sizing: border-box; 
 }
 
 .input-group input:focus {

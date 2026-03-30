@@ -81,3 +81,25 @@
     transition: 0.3s;
 }
 .btn-checkout:hover { background-color: var(--dark-red); }
+.product-checkbox {
+    width: 20px;
+    height: 20px;
+    accent-color: #e66363; /* Màu đỏ của theme */
+    cursor: pointer;
+}
+
+.select-all-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    background: white;
+    margin-bottom: 15px;
+    border-radius: 15px;
+    font-weight: 600;
+}
+
+.cart-item-card.selected {
+    border: 1px solid #ffe3e3;
+    background-color: #fffafb;
+}
