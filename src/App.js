@@ -14,6 +14,9 @@ import ProductDetail from './pages/ProductDetail/ProductDetail';
 import Profile from './pages/Profile/Profile';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
+import ForgotPassword from './pages/Auth/ForgotPassword';
+
+
 
 
 // Trang Admin 
@@ -40,6 +43,7 @@ const AppContent = () => {
         <Route path="/category/:slug" element={<CategoryPage />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />  
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/cart" element={<Cart />} />

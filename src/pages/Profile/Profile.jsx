@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Profile.css';
 
 const Profile = () => {
@@ -14,7 +15,10 @@ const Profile = () => {
         const { name, value } = e.target;
         setUserInfo({ ...userInfo, [name]: value });
     };
-
+    const navigate = useNavigate();
+    const handleLogout = () => {
+    navigate('/login');
+    };
     return (
         <main className="profile-container">
             <div className="profile-card">
@@ -69,9 +73,11 @@ const Profile = () => {
                 </div>
 
                 {/* Các nút hành động */}
-                <div className="profile-actions">
+               <div className="profile-actions">
                     <button className="btn-save">Lưu thay đổi</button>
-                    <button className="btn-logout">Đăng xuất</button>
+                    <button className="btn-logout" onClick={handleLogout}>
+                        Đăng xuất
+                    </button>
                 </div>
             </div>
         </main>
