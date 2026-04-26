@@ -45,23 +45,16 @@ const Header = () => {
                         <i className="fa-solid fa-cart-shopping"></i>
                     </Link>
 
-                    {/* --- KHU VỰC THAY ĐỔI THEO TRẠNG THÁI ĐĂNG NHẬP --- */}
+                    {/* --- KHU VỰC NGƯỜI DÙNG --- */}
                     {user ? (
                         <div className="user-control">
-                           
-                            {user.role === 'admin' && (
-                                <Link title="Quản trị" to="/admin" className="admin-btn">
-                                    <i className="fa-solid fa-user-gear"></i>
-                                </Link>
-                            )}
-                            
                             <Link title="Tài khoản" to="/profile">
                                 <i className="fa-solid fa-circle-user"></i>
                                 <span className="user-name">{user.email.split('@')[0]}</span>
                             </Link>
 
-                            <button title="Đăng xuất" onClick={handleLogout} className="logout-btn">
-                                <i className="fa-solid fa-right-from-bracket"></i>
+                            <button onClick={handleLogout} className="btn-logout" >
+                               Đăng xuất
                             </button>
                         </div>
                     ) : (

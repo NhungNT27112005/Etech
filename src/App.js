@@ -4,6 +4,7 @@ import './App.css';
 
 // Import Components
 import Cart from './pages/Cart/Cart';
+import Payment from './pages/Cart/Payment';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 
@@ -17,25 +18,11 @@ import Register from './pages/Auth/Register';
 import ForgotPassword from './pages/Auth/ForgotPassword';
 
 
-
-
-// Trang Admin 
-import AdminLayout from './pages/Admin/AdminLayout';
-import AdminProducts from './pages/Admin/AdminProducts';
-import Dashboard from './pages/Admin/Dashboard';
-import AdminOrders from './pages/Admin/AdminOrders';
-import AdminUsers from './pages/Admin/AdminUsers';
-
 const AppContent = () => {
   const location = useLocation();
-  
-  // Kiểm tra: Nếu đường dẫn bắt đầu bằng "/admin" thì là trang quản trị
-  const isAdminPage = location.pathname.startsWith('/admin');
-
   return (
     <>
-      {/* CHỈ hiện Header khách nếu KHÔNG phải trang Admin */}
-      {!isAdminPage && <Header />}
+      {<Header />}
 
       <Routes>
         {/* --- ROUTES KHÁCH HÀNG --- */}
@@ -47,18 +34,9 @@ const AppContent = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/cart" element={<Cart />} />
-
-        {/* --- ROUTES ADMIN (Giao diện riêng hoàn toàn) --- */}
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<Dashboard />} /> 
-          <Route path="products" element={<AdminProducts />} />
-          <Route path="orders" element={<AdminOrders />} /> 
-          <Route path="users" element={<AdminUsers />} />
-        </Route>
+        <Route path="/payment" element={<Payment />} />
       </Routes>
-
-      {/* CHỈ hiện Footer khách nếu KHÔNG phải trang Admin */}
-      {!isAdminPage && <Footer />}
+      {<Footer />}
     </>
   );
 };

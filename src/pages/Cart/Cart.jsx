@@ -1,57 +1,64 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Thêm useNavigate
 import './Cart.css';
 
 const Cart = () => {
-    // 1. Khởi tạo dữ liệu mẫu (Thêm thuộc tính selected)
+    const navigate = useNavigate(); // Khởi tạo điều hướng
+
     const [cartItems, setCartItems] = useState([
         { id: 1, name: 'iPhone 15 Pro Max', price: 29990000, quantity: 1, image: 'https://via.placeholder.com/80', selected: true },
         { id: 2, name: 'Tai nghe Sony WH-1000XM5', price: 6500000, quantity: 2, image: 'https://via.placeholder.com/80', selected: false }
     ]);
 
-    // 2. Logic thay đổi số lượng
     const updateQuantity = (id, delta) => {
         setCartItems(cartItems.map(item => 
             item.id === id ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item
         ));
     };
 
-    // 3. Logic tích chọn từng sản phẩm
     const toggleSelect = (id) => {
         setCartItems(cartItems.map(item => 
             item.id === id ? { ...item, selected: !item.selected } : item
         ));
     };
 
-    // 4. Logic Chọn tất cả / Bỏ chọn tất cả
     const toggleSelectAll = (e) => {
         const isChecked = e.target.checked;
         setCartItems(cartItems.map(item => ({ ...item, selected: isChecked })));
     };
 
-    // 5. Hàm xóa sản phẩm
     const removeItem = (id) => {
         if(window.confirm("Xóa sản phẩm này khỏi giỏ hàng?")) {
             setCartItems(cartItems.filter(item => item.id !== id));
         }
     };
 
-    // 6. TÍNH TOÁN: Chỉ tính tiền những món được tích chọn
     const selectedCount = cartItems.filter(item => item.selected).length;
     const totalPrice = cartItems
         .filter(item => item.selected)
         .reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+    // --- HÀM XỬ LÝ THANH TOÁN ---
+    const handleCheckout = () => {
+        const selectedItems = cartItems.filter(item => item.selected);
+        
+        // Chuyển sang trang checkout và mang theo dữ liệu tiền + danh sách món hàng
+        navigate('/payment', { 
+            state: { 
+                total: totalPrice, 
+                items: selectedItems 
+            } 
+        });
+    };
 
     return (
         <main className="cart-container">
             <h1 className="page-title">Giỏ hàng của bạn</h1>
             
             <div className="cart-layout">
-                {/* CỘT TRÁI: DANH SÁCH SẢN PHẨM */}
                 <div className="cart-items-section">
                     {cartItems.length > 0 ? (
                         <>
-                            {/* Thanh chọn tất cả */}
                             <div className="select-all-bar">
                                 <input 
                                     type="checkbox" 
@@ -96,7 +103,6 @@ const Cart = () => {
                     )}
                 </div>
 
-                {/* CỘT PHẢI: TÓM TẮT THANH TOÁN */}
                 <aside className="cart-summary">
                     <div className="summary-card">
                         <h3>Tóm tắt đơn hàng</h3>
@@ -113,7 +119,13 @@ const Cart = () => {
                             <span>Tổng cộng:</span>
                             <span className="final-price">{totalPrice.toLocaleString()}đ</span>
                         </div>
-                        <button className="btn-checkout" disabled={selectedCount === 0}>
+                        
+                        {/* Nút thanh toán đã được gắn hàm handleCheckout */}
+                        <button 
+                            className="btn-checkout" 
+                            disabled={selectedCount === 0}
+                            onClick={handleCheckout}
+                        >
                             {selectedCount > 0 ? `Thanh toán (${selectedCount})` : 'Vui lòng chọn sản phẩm'}
                         </button>
                     </div>
