@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Thêm useNavigate
+import { Link, useNavigate } from 'react-router-dom'; 
 import './Cart.css';
 
 const Cart = () => {
-    const navigate = useNavigate(); // Khởi tạo điều hướng
+    const navigate = useNavigate(); 
 
     const [cartItems, setCartItems] = useState([
         { id: 1, name: 'iPhone 15 Pro Max', price: 29990000, quantity: 1, image: 'https://via.placeholder.com/80', selected: true },

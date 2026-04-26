@@ -6,6 +6,15 @@ import NotificationDropdown from '../Notification/NotificationDropdown';
 const Header = () => {
     const navigate = useNavigate();
     const [showNotif, setShowNotif] = useState(false); 
+
+    // state thanh tìm kiếm 
+    const [searchTerm, setSearchTerm] = useState('');
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (searchTerm.trim() !== '') {
+            navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
+        }
+    };
     
     // Lấy dữ liệu người dùng từ trình duyệt
     const user = JSON.parse(localStorage.getItem('user'));
@@ -26,10 +35,17 @@ const Header = () => {
                 <Link to="/" className="brand-logo">E-Tech</Link>
 
                 {/* Thanh tìm kiếm */}
-                <div className="search-bar">
-                    <input type="text" placeholder="Bạn tìm sản phẩm gì ..." />
-                    <i className="fa-solid fa-magnifying-glass"></i>
-                </div>
+                <form className="search-bar" onSubmit={handleSearch}>
+                    <input 
+                        type="text" 
+                        placeholder="Bạn tìm sản phẩm gì ..." 
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    <button type="submit" style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                        <i className="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
 
                 {/* Các Icon chức năng */}
                 <div className="header-icons">
