@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios'; 
 import './Auth.css';
 
 const Login = () => {
@@ -7,27 +8,40 @@ const Login = () => {
     const [password, setPassword] = useState(''); 
     const navigate = useNavigate();
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
         
-        // Logic giả lập: Admin nếu là email admin, còn lại là khách
-        let userRole = 'customer';
-        if (email === 'admin@etech.com') {
-            userRole = 'admin';
+       try {
+            // Gửi yêu cầu đăng nhập lên Backend
+            const response = await axios.post("http://localhost:3000/login", {
+                email: email,
+                password: password
+            });
+
+            if (response.status === 200) {
+                const userData = response.data.user;
+
+                // 1. Lưu thông tin User vào localStorage
+                // Quan trọng: Lưu cả user_id để dùng cho chức năng Giỏ hàng sau này
+                localStorage.setItem('user', JSON.stringify(userData));
+
+                alert(`Chào mừng ${userData.full_name || userData.email}!`);
+
+                // 2. Điều hướng dựa trên quyền (role)
+                if (userData.role === 'admin') {
+                    navigate('/admin');
+                } else {
+                    navigate('/');
+                }
+                
+                // Reload để Header cập nhật trạng thái đã đăng nhập
+                window.location.reload(); 
+            }
+        } catch (error) {
+            // Hiển thị lỗi từ Backend (401: Sai pass, 500: Lỗi server)
+            const message = error.response?.data?.message || "Lỗi kết nối đến máy chủ!";
+            alert(message);
         }
-
-        const userData = { email, role: userRole };
-        localStorage.setItem('user', JSON.stringify(userData));
-
-        // Thông báo đăng nhập thành công (tùy chọn)
-        alert(`Đăng nhập thành công với quyền ${userRole.toUpperCase()}!`);
-
-        if (userRole === 'admin') {
-            navigate('/admin');
-        } else {
-            navigate('/');
-        }
-        window.location.reload(); 
     };
 
     return (

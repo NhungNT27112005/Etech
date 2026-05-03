@@ -5,14 +5,27 @@ import './Profile.css';
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editData, setEditData] = useState({ phone_number: '', default_address: '' });
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      const userId = localStorage.getItem('userId') || 1; 
-
       try {
+        const storedUser = localStorage.getItem('user');
+        if (!storedUser) {
+          setLoading(false);
+          return;
+        }
+
+        const userData = JSON.parse(storedUser);
+        const userId = userData.user_id; 
+
         const response = await axios.get(`http://localhost:3000/profile/${userId}`);
         setUser(response.data);
+        setEditData({
+          phone_number: response.data.phone_number || '',
+          default_address: response.data.default_address || ''
+        });
       } catch (error) {
         console.error("Lỗi lấy profile:", error);
       } finally {
@@ -23,47 +36,78 @@ const Profile = () => {
     fetchUserProfile();
   }, []);
 
-  if (loading) return <div className="loading">Đang tải thông tin cá nhân...</div>;
-  if (!user) return <div className="error">Vui lòng đăng nhập để xem thông tin!</div>;
+  const handleSave = async () => {
+    try {
+      await axios.put(`http://localhost:3000/profile/${user.user_id}`, editData);
+      alert("Cập nhật thành công!");
+      setIsEditing(false);
+      setUser({ ...user, ...editData });
+    } catch (error) {
+      alert("Lỗi khi lưu thông tin");
+    }
+  };
+
+  if (loading) return <div className="profile-status">Đang tải thông tin...</div>;
+  if (!user) return <div className="profile-status">Vui lòng đăng nhập để xem thông tin!</div>;
 
   return (
-    <div className="profile-container">
+    <div className="profile-page-wrapper">
       <div className="profile-card">
-        <div className="profile-header">
-          <img 
-            src={user.avatar_url || '/default-avatar.png'} 
-            alt="Avatar" 
-            className="profile-avatar" 
-          />
-          <h2>{user.full_name}</h2>
-          <p className="user-role">Khách hàng thành viên</p>
+        <h2 className="card-title">Tài khoản</h2>
+        
+        <div className="card-content">
+          <div className="info-section">
+            <div className="input-row">
+              <label>Username:</label>
+              <input type="text" value={user.username} disabled />
+            </div>
+
+            <div className="input-row">
+              <label>Email:</label>
+              <input type="text" value={user.email} disabled />
+            </div>
+
+            <div className="input-row">
+              <label>PhoneNumber:</label>
+              <input 
+                type="text" 
+                value={editData.phone_number} 
+                onChange={(e) => setEditData({...editData, phone_number: e.target.value})}
+                disabled={!isEditing}
+                placeholder="Chưa cập nhật số điện thoại"
+              />
+            </div>
+
+            <div className="input-row">
+              <label>Address:</label>
+              <input 
+                type="text" 
+                value={editData.default_address} 
+                onChange={(e) => setEditData({...editData, default_address: e.target.value})}
+                disabled={!isEditing}
+                placeholder="Chưa cập nhật địa chỉ"
+              />
+            </div>
+          </div>
+
+          <div className="avatar-section">
+            <div className="default-avatar-placeholder">
+              <i className="fa-solid fa-user"></i>
+            </div>
+          </div>
         </div>
 
-        <div className="profile-body">
-          <div className="info-group">
-            <label><i className="fa-solid fa-envelope"></i> Email:</label>
-            <span>{user.email}</span>
-          </div>
-          <div className="info-group">
-            <label><i className="fa-solid fa-phone"></i> Số điện thoại:</label>
-            <span>{user.phone || 'Chưa cập nhật'}</span>
-          </div>
-          <div className="info-group">
-            <label><i className="fa-solid fa-location-dot"></i> Địa chỉ:</label>
-            <span>{user.address || 'Chưa cập nhật'}</span>
-          </div>
-          <div className="info-group">
-            <label><i className="fa-solid fa-calendar-days"></i> Ngày tham gia:</label>
-            <span>{new Date(user.created_at).toLocaleDateString('vi-VN')}</span>
-          </div>
-        </div>
-
-        <div className="profile-footer">
-          <button className="btn-edit-profile">Chỉnh sửa thông tin</button>
+        <div className="button-group">
+          {isEditing ? (
+            <button className="btn-save" onClick={handleSave}>Save</button>
+          ) : (
+            <button className="btn-save" onClick={() => setIsEditing(true)}>Edit</button>
+          )}
+          
           <button className="btn-logout" onClick={() => {
             localStorage.clear();
             window.location.href = '/login';
-          }}>Đăng xuất</button>
+          }}>Logout</button>
         </div>
       </div>
     </div>

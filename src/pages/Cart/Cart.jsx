@@ -1,38 +1,67 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; 
+import axios from 'axios';
 import './Cart.css';
 
 const Cart = () => {
-    const navigate = useNavigate(); 
+    const [cartItems, setCartItems] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+    
+    useEffect(() => {
+        fetchCart();
+    }, []);
 
-    const [cartItems, setCartItems] = useState([
-        { id: 1, name: 'iPhone 15 Pro Max', price: 29990000, quantity: 1, image: 'https://via.placeholder.com/80', selected: true },
-        { id: 2, name: 'Tai nghe Sony WH-1000XM5', price: 6500000, quantity: 2, image: 'https://via.placeholder.com/80', selected: false }
-    ]);
+    const fetchCart = async()=>{
+        try {
+            const storedUser = localStorage.getItem('user'); 
+            if(!storedUser) {
+                setLoading(false);
+                return;
+            }
+            const userData = JSON.parse(storedUser);
 
+            const response = await axios.get(`http://localhost:3000/cart/${userData.user_id}`);
+            const formattedItems = response.data.map(item => ({
+                id: item.cart_id,
+                productId: item.product_id,
+                name: item.product_name,
+                price: item.unit_price,
+                image: item.image_url,
+                quantity: item.quantity,
+                selected: false 
+            }));
+            setCartItems(formattedItems);
+        } catch (error) {
+            console.error("Lỗi khi lấy giỏ hàng:", error);
+            setLoading(false);
+        }
+    }; 
+
+    // hàm cập nhật số lượng sản phẩm trong giỏ hàng
     const updateQuantity = (id, delta) => {
         setCartItems(cartItems.map(item => 
             item.id === id ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item
         ));
     };
-
+    // hàm toggle chọn sản phẩm
     const toggleSelect = (id) => {
         setCartItems(cartItems.map(item => 
             item.id === id ? { ...item, selected: !item.selected } : item
         ));
     };
-
+    // hàm toggle chọn tất cả sản phẩm
     const toggleSelectAll = (e) => {
         const isChecked = e.target.checked;
         setCartItems(cartItems.map(item => ({ ...item, selected: isChecked })));
     };
-
+    // hàm xóa sản phẩm khỏi giỏ hàng
     const removeItem = (id) => {
         if(window.confirm("Xóa sản phẩm này khỏi giỏ hàng?")) {
             setCartItems(cartItems.filter(item => item.id !== id));
         }
     };
-
+// tính tổng số sản phẩm được chọn và tổng tiền của các sản phẩm đó
     const selectedCount = cartItems.filter(item => item.selected).length;
     const totalPrice = cartItems
         .filter(item => item.selected)

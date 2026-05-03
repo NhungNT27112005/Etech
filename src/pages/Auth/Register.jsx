@@ -1,25 +1,49 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios'; // Import axios
 import './Auth.css'; 
 
 const Register = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        username: '',
+        username: '', // Đã đổi từ fullName thành username
         email: '',
         password: '',
         confirmPassword: ''
     });
 
-    const handleRegister = (e) => {
+    // Hàm cập nhật state khi nhập liệu
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const handleRegister = async (e) => { // Thêm async ở đây
         e.preventDefault();
+        
+        // Kiểm tra mật khẩu khớp nhau
         if(formData.password !== formData.confirmPassword) {
             alert("Mật khẩu nhập lại không khớp!");
             return;
         }
-        // Giả lập đăng ký thành công
-        alert("Đăng ký thành công! Hãy đăng nhập.");
-        navigate('/login');
+
+        try {
+            const response = await axios.post("http://localhost:3000/register", {
+                username: formData.username,
+                email: formData.email,
+                password: formData.password
+            });
+
+            if (response.status === 201) {
+                alert(response.data.message);
+                navigate('/login'); // Đăng ký xong chuyển sang trang đăng nhập
+            }
+        } catch (error) {
+            const msg = error.response?.data?.message || "Lỗi khi đăng ký tài khoản!";
+            alert(msg);
+        }
     };
 
     return (
@@ -36,23 +60,51 @@ const Register = () => {
                 </div>
 
                 <div className="input-group">
-                    <label>Họ và tên</label>
-                    <input type="text" placeholder="Nhập tên của bạn..." required />
+                    <label>Tên người dùng</label>
+                    <input 
+                        type="text" 
+                        name="username" 
+                        placeholder="Nhập tên người dùng..." 
+                        required 
+                        value={formData.username}
+                        onChange={handleChange}
+                    />
                 </div>
 
                 <div className="input-group">
                     <label>Email</label>
-                    <input type="email" placeholder="Ví dụ: customer@gmail.com" required />
+                    <input 
+                        type="email" 
+                        name="email" 
+                        placeholder="Ví dụ: customer@gmail.com" 
+                        required 
+                        value={formData.email}
+                        onChange={handleChange}
+                    />
                 </div>
 
                 <div className="input-group">
                     <label>Mật khẩu</label>
-                    <input type="password" placeholder="Tối thiểu 6 ký tự" required />
+                    <input 
+                        type="password" 
+                        name="password" 
+                        placeholder="Tối thiểu 6 ký tự" 
+                        required 
+                        value={formData.password}
+                        onChange={handleChange}
+                    />
                 </div>
 
                 <div className="input-group">
                     <label>Xác nhận mật khẩu</label>
-                    <input type="password" placeholder="Nhập lại mật khẩu" required />
+                    <input 
+                        type="password" 
+                        name="confirmPassword" 
+                        placeholder="Nhập lại mật khẩu" 
+                        required 
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                    />
                 </div>
 
                 <button type="submit" className="btn-auth">Đăng ký ngay</button>

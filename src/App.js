@@ -7,6 +7,7 @@ import Cart from './pages/Cart/Cart';
 import Payment from './pages/Cart/Payment';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
+import Chatbot from './components/Chatbot/Chatbot';
 
 // Import Pages
 import Home from './pages/Home/Home';
@@ -24,6 +25,7 @@ const AppContent = () => {
   return (
     <>
       {<Header />}
+      {<Chatbot />}
 
       <Routes>
         {/* --- ROUTES KHÁCH HÀNG --- */}
