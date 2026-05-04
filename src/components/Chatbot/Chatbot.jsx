@@ -3,7 +3,7 @@ import axios from 'axios';
 import './Chatbot.css';
 
 const Chatbot = () => {
-    const [isOpen, setIsOpen] = useState(false); // Đóng/mở khung chat
+    const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState([
         { text: "Xin chào! E-Tech có thể giúp gì cho bạn?", isBot: true }
     ]);
@@ -11,7 +11,6 @@ const Chatbot = () => {
     const [loading, setLoading] = useState(false);
     const messagesEndRef = useRef(null);
 
-    // Tự động cuộn xuống cuối khi có tin nhắn mới
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
@@ -22,23 +21,30 @@ const Chatbot = () => {
         e.preventDefault();
         if (!input.trim()) return;
 
+        // Lấy thông tin người dùng đang đăng nhập từ LocalStorage
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+
         const userMsg = { text: input, isBot: false };
         setMessages(prev => [...prev, userMsg]);
         setInput('');
         setLoading(true);
 
         try {
-            // Gọi đến API /chat bạn đã viết ở server.js
-            const response = await axios.post('http://localhost:3000/chat', { message: input });
+            // Gửi cả tin nhắn và thông tin user lên Backend
+            const response = await axios.post('http://localhost:3000/chat', { 
+                message: input,
+                user: storedUser 
+            });
             
+            // Lấy đúng trường .reply từ dữ liệu trả về của Gemini
             const botMsg = { 
-                text: response.data.data || "E-Tech hiện chưa có câu trả lời cho vấn đề này.", 
+                text: response.data.data.reply || response.data.data, 
                 isBot: true 
             };
             setMessages(prev => [...prev, botMsg]);
         } catch (error) {
             console.error("Lỗi Chatbot:", error);
-            setMessages(prev => [...prev, { text: "Xin lỗi, máy chủ đang bận!", isBot: true }]);
+            setMessages(prev => [...prev, { text: "Rất tiếc, mình đang bận một chút!", isBot: true }]);
         } finally {
             setLoading(false);
         }
@@ -46,36 +52,51 @@ const Chatbot = () => {
 
     return (
         <div className={`chatbot-wrapper ${isOpen ? 'active' : ''}`}>
-            {/* Nút tròn để mở chatbot */}
             <button className="chatbot-toggle" onClick={() => setIsOpen(!isOpen)}>
                 {isOpen ? <i className="fa-solid fa-xmark"></i> : <i className="fa-solid fa-comment-dots"></i>}
             </button>
 
-            {/* Khung nội dung Chat */}
             <div className="chatbot-container">
                 <div className="chatbot-header">
-                    <h3>Trợ lý ảo E-Tech</h3>
-                    <p>Luôn sẵn sàng hỗ trợ bạn</p>
+                    <div className="header-info">
+                        <div className="online-dot"></div>
+                        <div>
+                            <h3>E-Tech Assistant</h3>
+                            <span>Trực tuyến</span>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="chatbot-messages">
                     {messages.map((msg, index) => (
-                        <div key={index} className={`message ${msg.isBot ? 'bot' : 'user'}`}>
-                            <div className="message-content">{msg.text}</div>
+                        <div key={index} className={`message-wrapper ${msg.isBot ? 'bot' : 'user'}`}>
+                            {msg.isBot && <div className="bot-avatar">E</div>}
+                            <div className="message-content">
+                                {msg.text}
+                            </div>
                         </div>
                     ))}
-                    {loading && <div className="message bot"><div className="typing-loader"></div></div>}
+                    {loading && (
+                        <div className="message-wrapper bot">
+                            <div className="bot-avatar">E</div>
+                            <div className="typing-indicator">
+                                <span></span><span></span><span></span>
+                            </div>
+                        </div>
+                    )}
                     <div ref={messagesEndRef} />
                 </div>
 
                 <form className="chatbot-input" onSubmit={handleSendMessage}>
                     <input 
                         type="text" 
-                        placeholder="Nhập câu hỏi của bạn..." 
+                        placeholder="Hỏi E-Tech về sản phẩm..." 
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                     />
-                    <button type="submit"><i className="fa-solid fa-paper-plane"></i></button>
+                    <button type="submit" disabled={!input.trim()}>
+                        <i className="fa-solid fa-paper-plane"></i>
+                    </button>
                 </form>
             </div>
         </div>
